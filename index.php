@@ -4,25 +4,27 @@ $logged_in = false;
 
 if(isset($_COOKIE['uid'])){
 	$logged_in = true;
-	echo 'Logged in.';
 } else{
-	echo 'Not logged in.';
 	if(isset($_GET['login'])){
 		echo 'Validating.';
 		//TODO form valdation
 		
 		$uid = check_login($_POST['username'],sha1($_POST['password']));
-		echo sha1($_POST['password']);
+		echo $uid;
 		if($uid != 0){
-			setcookie("uid","{$uid}",time()+3600*14,"/",".phantastyc.tk");
+			setcookie("uid",$uid,time()+3600*14,"/",".phantastyc.tk");
+			header("Location: http://phantastyc.tk/feed");
 		} else{
-			echo 'Incorrect passwd.';
+			echo 'Incorrect password.';
 		}
 	}
 }
 
-if(isset($_POST['logout'])){
+if(isset($_GET['logout'])){
+	echo 'Logout invoked.';
 	unset($_COOKIE['uid']);
+	setcookie("uid","",time()-3600,"/",".phantastyc.tk");
+	header("Location: http://phantastyc.tk/feed");
 }
 
 ?>
@@ -38,8 +40,10 @@ if(isset($_POST['logout'])){
 	if($logged_in){
 ?>
     <div id="ucp">
-    	<h2>Hiya User number<?php echo $_COOKIE['uid']?></h2>
-    	<button type="submit" id="logout" name="logout">Logout</button>
+    	<h2>Hiya User Number <?php echo $_COOKIE['uid']?></h2>
+        <form action="?logout" method="post">
+        	<input type="submit" value="logout">
+        </form>
     </div>
 <?php
 	} else {
