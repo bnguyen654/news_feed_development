@@ -1,6 +1,6 @@
 #News Feed
 
-##Stuff Done
+##Completed
 - Login System
 
 ##Todo List
